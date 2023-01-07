@@ -1,21 +1,18 @@
 from django.contrib import admin
-from django.contrib.auth.models import User
-from menu.models import MenuItem, Menu
+from menu.models import Menu, Post
 
 
-u = User.objects.get(username='john')
-u.set_password('new password')
-u.save()
+@admin.register(Menu)
+class MenuAdmin(admin.ModelAdmin):
+    list_display = ('title', 'slug')
+    prepopulated_fields = {'slug':  ('title',)}
+    empty_value_display = '-пусто-'
 
 
+@admin.register(Post)
+class PostAdmin(admin.ModelAdmin):
+    list_display = ('title', 'parent')
+    list_filter = ('menu',)
+    prepopulated_fields = {'slug':  ('title',)}
+    empty_value_display = '-пусто-'
 
-
-
-@admin.register(MenuItem)
-class MenuItemAdmin(admin.ModelAdmin):
-    list_display = ('name', 'parent', 'is_visible', 'order')
-    list_editable = ('is_visible', 'order')
-    list_filter = ('parent',)
-
-
-admin.site.register(Menu)
